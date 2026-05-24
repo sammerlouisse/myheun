@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #edf6f9, #dfefff);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: #0b1f33;
+}
+
+.container {
+    width: 85%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 25px;
+}
+
+h1 {
+    color: #0b1f33;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2, h3 {
+    color: #102a43;
+}
+
+/* Cards */
+.card, .formula, form, .result {
+    background: white;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Buttons */
+button {
+    background: #f59e0b;
+    color: #0b1f33;
+    border: none;
+    padding: 12px 18px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease;
+    left: 72%;
+    position: relative;
+}
+
+button:hover {
+    transform: scale(1.03);
+    opacity: 0.95;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #f59e0b;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table th {
+    background: #0b1f33;
+    color: white;
+    padding: 12px;
+}
+
+table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Result box */
+.result {
+    background: #0b1f33;
+    color: white;
+}
+
+/* Formula box */
+.formula {
+    border-left: 6px solid #f59e0b;
+}
+
+

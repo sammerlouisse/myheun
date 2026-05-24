@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Improved Euler Method</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<!-- MathJax -->
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
+
+
+<script id="MathJax-script" async
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body{
+    background: linear-gradient(135deg, #edf6f9, #dfefff);
+    width:1440px;
+    height:950px;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* =========================
+   LEFT PANEL
+========================= */
+
+.container{
+    position:relative;
+    width:687px;
+    height:846px;
+    left:-320px;
+    top:42px;
+
+    background:#E1F2FB;
+    border-radius:20px;
+
+    padding:40px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.side-panel{
+    position:relative;
+    width:688px;
+    height:846px;
+    left:775px;
+    top:-807px;
+
+    background:#E1F2FB;
+    border-radius:20px;
+
+    padding:40px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   TITLES
+========================= */
+
+h1{
+    color:#0b1f33;
+    font-size:25px;
+    margin-left:-380px;
+}
+
+h2{
+    color:#102a43;
+    margin-top:10px;
+    margin-bottom:15px;
+    font-size:20px;
+}
+
+
+/* =========================
+   FORMULA BOX
+========================= */
+
+.formula{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    border-left:6px solid #f59e0b;
+    background: size 50% 100%;
+
+    margin:20px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+    font-size:15px;
+    color:#0b1f33;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons{
+    margin-top:30px;
+}
+
+button{
+    background:#f59e0b;
+    color:#0b1f33;
+
+    border:none;
+
+    padding:14px 24px;
+
+    margin-right:20px;
+    margin-top:30px;
+    left: 1010px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+    font-weight:bold;
+
+    transition:0.2s ease;
+}
+
+button:hover{
+    transform:scale(1.03);
+    opacity:0.95;
+}
+
+/* =========================
+   RIGHT PANEL CONTENT
+========================= */
+
+.side-title{
+    font-size:25px;
+    color:#0b1f33;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.info-box{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    margin-bottom:20px;
+
+    border-left:6px solid #f59e0b;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.info-box h3{
+    color:#102a43;
+    margin-bottom:10px;
+}
+
+.info-box p{
+    font-size:16px;
+    margin-bottom:0;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1200px){
+
+    body{
+        width:auto;
+        height:auto;
+        padding:20px;
+    }
+
+    .container,
+    .side-panel{
+        position:relative;
+        width:95%;
+        height:auto;
+        left:0;
+        top:0;
+        margin:auto;
+        margin-bottom:25px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- LEFT PANEL -->
+
+<div class="container">
+
+    <h1>Improved Euler Method</h1>
+
+    <p>
+        The Improved Euler Method, also called
+        <b>Heun’s Method</b>,
+        is used to approximate the solution of an
+        initial value problem:
+    </p>
+
+    <div class="formula">
+        <br>$$ \frac{dy}{dx} = f(x,y) $$ $$ y(x_0)=y_0 $$<br>
+    </div>
+
+    <p>
+        Ordinary Euler’s Method uses only the slope
+        at the beginning of the interval.
+        Heun’s Method improves accuracy by averaging
+        the starting slope and predicted ending slope.
+    </p>
+
+    <h2>Algorithm</h2>
+
+    <div class="formula">
+
+        <b>Predictor</b>
+
+        <br><br>
+
+        $$ y_p = y_n + h f(x_n,y_n) $$
+
+    </div>
+
+    <div class="formula">
+
+        <b>Corrector</b>
+
+        <br><br>
+
+        $$ y_{n+1} =
+        y_n + \frac{h}{2}
+        [f(x_n,y_n)+f(x_{n+1},y_p)] $$
+
+    </div>
+
+    <div class="buttons">
+
+        <a href="/examples">
+            <button>View Examples</button>
+        </a>
+
+        <a href="/calculator">
+            <button>Open Calculator</button>
+        </a>
+
+    </div>
+
+</div>
+
+<!-- RIGHT PANEL -->
+
+<div class="side-panel">
+
+    <div class="side-title">
+        Why Use Heun Method?
+    </div>
+
+    <div class="info-box">
+
+        <h3>Better Accuracy</h3>
+
+        <p>
+            Heun’s Method improves the ordinary Euler
+            method by averaging two slopes.
+        </p>
+
+    </div>
+
+    <div class="info-box">
+
+        <h3>Easy to Implement</h3>
+
+        <p>
+            It is simple to code and useful for solving
+            first-order differential equations numerically.
+        </p>
+
+    </div>
+
+    <div class="info-box">
+
+        <h3>Applications</h3>
+
+        <p>
+            Used in engineering, physics,
+            population models,
+            and numerical simulations.
+        </p>
+
+    </div>
+
+    <div class="info-box">
+
+        <h3>Formula Summary</h3>
+
+        <p>
+            Predictor → estimate next value
+            <br><br>
+            Corrector → improve approximation
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+
+
+

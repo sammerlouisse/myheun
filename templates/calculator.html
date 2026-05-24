@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title> Heun Calculator</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+body{
+    background: linear-gradient(135deg, #edf6f9, #dfefff);
+    min-height:100vh;
+    padding:25px;
+}
+
+
+
+.wrapper{
+    display:flex;
+    gap:25px;
+    align-items:flex-start;
+    height:100%;
+}
+
+
+
+.left-panel,
+.right-panel{
+
+    background:#E1F2FB;
+
+    border-radius:25px;
+
+    padding:35px;
+
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+
+}
+
+.left-panel{
+    width:35%;
+    position:sticky;
+    top:20px;
+}
+
+.right-panel{
+    width:65%;
+}
+
+
+
+h1{
+    color:#0b1f33;
+    font-size:25px;
+    margin-bottom:25px;
+}
+
+h2{
+    color:#102a43;
+    margin-bottom:20px;
+    font-size:20px;
+    
+}
+
+
+
+form{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+}
+
+label{
+
+    display:block;
+
+    margin-top:15px;
+    margin-bottom:8px;
+
+    font-weight:bold;
+
+    color:#102a43;
+}
+
+input{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+    outline:none;
+}
+
+input:focus{
+    border-color:#f59e0b;
+}
+
+
+
+.form-button{
+
+    background:#f59e0b;
+    color:#0b1f33;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s ease;
+    top:-130%;
+    left: 250px;
+
+}
+
+.form-button:hover{
+
+    transform:scale(1.03);
+
+    opacity:0.95;
+}
+
+
+
+
+.back-home{
+
+    margin-top:25px;
+
+    text-align:center;
+}
+
+.back-btn{
+
+    background:#f59e0b;
+    color:#0b1f33;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s ease;
+    left: 140px;
+    position:relative;
+    margin-top: -220%;
+    
+}
+
+.back-btn:hover{
+
+    transform:scale(1.03);
+
+    opacity:0.95;
+}
+
+
+
+
+.result{
+
+    background:#f59e0b;
+
+    color:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    margin-top: -1%;
+    font-size:15px;
+
+}
+
+.result p{
+    font-size:18px;
+}
+
+
+
+
+.step-box{
+
+    background:white;
+
+    border-left:6px solid #f59e0b;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+}
+
+.step-title{
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:#102a43;
+
+    margin-bottom:20px;
+}
+
+.formula{
+
+    font-size:15px;
+
+    line-height:2.1;
+
+    color:#0b1f33;
+}
+
+
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:-20px;
+
+    background:white;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+}
+
+table th{
+
+    background:#f59e0b;
+
+    color:white;
+
+    padding:14px;
+
+    font-size:18px;
+}
+
+table td{
+
+    border:1px solid #ddd;
+
+    padding:12px;
+
+    text-align:center;
+
+    font-size:15px;
+}
+
+
+
+
+.empty-box{
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+    color:#102a43;
+
+    font-size:20px;
+
+}
+
+
+
+
+@media(max-width:900px){
+
+    .wrapper{
+        flex-direction:column;
+    }
+
+    .left-panel,
+    .right-panel{
+        width:100%;
+    }
+
+    .left-panel{
+        position:relative;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+
+
+
+<div class="left-panel">
+
+    <h1>Heun Calculator</h1>
+
+   <form method="POST" action="/calculator" autocomplete="off">
+
+    <label>f(x,y)</label>
+
+    <input type="text"
+    name="equation"
+    placeholder="Example: x+y or y-x**2+1"
+    value="{{ equation }}"
+    required>
+
+    <label>x₀</label>
+
+    <input type="number"
+    step="any"
+    name="x0"
+    value="{{ x0 }}"
+    required>
+
+    <label>y₀</label>
+
+    <input type="number"
+    step="any"
+    name="y0"
+    value="{{ y0 }}"
+    required>
+
+    <label>Step Size h</label>
+
+    <input type="number"
+    step="any"
+    name="h"
+    value="{{ h }}"
+    required>
+
+    <label>Target x</label>
+
+    <input type="number"
+    step="any"
+    name="target"
+    value="{{ target }}"
+    required>
+
+    <button type="submit" class="form-button">
+        Calculate
+    </button>
+
+</form>
+
+  
+
+    <div class="back-home">
+
+        <a href="/">
+
+            <button type="button" class="back-btn">
+                Back Home
+            </button>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="right-panel">
+
+{% if result %}
+
+    <!-- FINAL RESULT -->
+
+    <div class="result">
+
+        <h2>Final Result</h2>
+
+        <p>
+
+            Approximate Value:
+            <b>{{ result }}</b>
+
+        </p>
+
+    </div>
+
+
+
+<h2>Solutions</h2>
+
+{% for row in steps %}
+
+<div class="step-box">
+
+    <div class="step-title">
+
+        Step {{ row.n + 1 }}
+
+    </div>
+
+    <div class="formula">
+
+        <b>Given:</b>
+
+        <br>
+
+        xₙ = {{ row.x }}
+
+        <br>
+
+        yₙ = {{ row.y }}
+
+        <br>
+
+        h = {{ row.h }}
+
+        <br><br>
+
+        <!-- STEP 1 -->
+
+        <b>Step 1: Compute Initial Slope</b>
+
+        <br><br>
+
+        Formula:
+
+        <br>
+
+        f(xₙ,yₙ)
+
+        <br><br>
+
+        Substitute:
+
+        <br>
+
+        f({{ row.x }}, {{ row.y }})
+
+        <br><br>
+
+        Result:
+
+        <br>
+
+        f(xₙ,yₙ) = {{ row.slope_start }}
+
+        <br><br>
+
+        <!-- STEP 2 -->
+
+        <b>Step 2: Predictor Formula</b>
+
+        <br><br>
+
+        Formula:
+
+        <br>
+
+        yₚ = yₙ + h[f(xₙ,yₙ)]
+
+        <br><br>
+
+        Substitute:
+
+        <br>
+
+        yₚ = {{ row.y }}
+        + 
+        {{ row.h }}
+        (
+        {{ row.slope_start }}
+        )
+
+        <br><br>
+
+        Simplify:
+
+        <br>
+
+        yₚ = {{ row.predictor }}
+
+        <br><br>
+
+        <!-- STEP 3 -->
+
+        <b>Step 3: Compute xₙ₊₁</b>
+
+        <br><br>
+
+        Formula:
+
+        <br>
+
+        xₙ₊₁ = xₙ + h
+
+        <br><br>
+
+        Substitute:
+
+        <br>
+
+        xₙ₊₁ = {{ row.x }}
+        + 
+        {{ row.h }}
+
+        <br><br>
+
+        Simplify:
+
+        <br>
+
+        xₙ₊₁ = {{ row.x_next }}
+
+        <br><br>
+
+        <!-- STEP 4 -->
+
+        <b>Step 4: Compute Predicted Slope</b>
+
+        <br><br>
+
+        Formula:
+
+        <br>
+
+        f(xₙ₊₁,yₚ)
+
+        <br><br>
+
+        Substitute:
+
+        <br>
+
+        f({{ row.x_next }}, {{ row.predictor }})
+
+        <br><br>
+
+        Result:
+
+        <br>
+
+        f(xₙ₊₁,yₚ) = {{ row.slope_end }}
+
+        <br><br>
+
+        <!-- STEP 5 -->
+
+        <b>Step 5: Corrector Formula</b>
+
+        <br><br>
+
+        Formula:
+
+        <br>
+
+        yₙ₊₁ = yₙ + (h/2)[f(xₙ,yₙ) + f(xₙ₊₁,yₚ)]
+
+        <br><br>
+
+        Substitute:
+
+        <br>
+
+        yₙ₊₁ = {{ row.y }}
+        +
+        ({{ row.h }}/2)
+        [
+        {{ row.slope_start }}
+        +
+        {{ row.slope_end }}
+        ]
+
+        <br><br>
+
+        Simplify:
+
+        <br>
+
+        yₙ₊₁ = {{ row.y_next }}
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+    <!-- TABLE -->
+
+    <h2>Steps Table</h2>
+
+    <table>
+
+        <tr>
+
+            <th>n</th>
+            <th>xₙ</th>
+            <th>yₙ</th>
+            <th>f(xₙ,yₙ)</th>
+            <th>Predictor</th>
+            <th>f(xₙ₊₁,yₚ)</th>
+            <th>yₙ₊₁</th>
+
+        </tr>
+
+        {% for row in steps %}
+
+        <tr>
+
+            <td>{{ row.n }}</td>
+            <td>{{ row.x }}</td>
+            <td>{{ row.y }}</td>
+            <td>{{ row.slope_start }}</td>
+            <td>{{ row.predictor }}</td>
+            <td>{{ row.slope_end }}</td>
+            <td>{{ row.y_next }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+{% else %}
+
+    <!-- EMPTY STATE -->
+
+    <div class="empty-box">
+
+        <h2>No Calculation Yet</h2>
+
+        <br>
+
+        Enter the values on the left panel and click
+        <b>Calculate</b>
+        to display the complete solution.
+
+    </div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+</html>

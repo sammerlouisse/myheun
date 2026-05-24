@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worked Examples - Heun Method</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+
+body{
+    background: linear-gradient(135deg, #edf6f9, #dfefff);
+    width:1440px;
+    height:900px;
+    position:relative;
+    overflow-x:hidden;
+}
+
+
+
+
+.container{
+    position: absolute;
+
+    width: 687px;
+    height: 790px;
+
+    left: 55px;
+    top: 42px;
+
+    background: #E1F2FB;
+
+    border-radius: 20px;
+    padding: 30px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+    overflow-y: auto;
+}
+
+
+
+.container2{
+    position: absolute;
+
+    width: 688px;
+    height: 790px;
+
+    left: 775px;
+    top: 42px;
+
+    background: #E1F2FB;
+
+    border-radius: 20px;
+    padding: 30px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+    overflow-y: auto;
+}
+
+
+
+.title{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.icon{
+    font-size:28px;
+    color:#f59e0b;
+}
+
+h1{
+    font-size:30px;
+    color:#0b1f33;
+}
+
+.intro{
+    font-size:18px;
+    line-height:1.8;
+    margin-bottom:25px;
+    color:#102a43;
+}
+
+
+
+.step-box{
+    background:white;
+    border-left:6px solid #f59e0b;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.step-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:12px;
+    color:#102a43;
+}
+
+.formula{
+    font-size:17px;
+    line-height:2;
+    color:#0b1f33;
+}
+
+
+
+.result{
+    background:#f59e0b;
+    color:rgb(13, 13, 13);
+    padding:18px;
+    border-radius:12px;
+    font-size:20px;
+    font-weight:bold;
+    margin-top:20px;
+}
+
+.exact{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    margin-top:15px;
+    font-size:16px;
+    color:#102a43;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+
+
+.back-btn{
+    position:absolute;
+    bottom:40px;
+    right:-20px;
+    top:94%;
+}
+
+button{
+    background:#f59e0b;
+    color:#0b1f33;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s ease;
+    
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+</style>
+</head>
+
+<body>
+
+
+
+<div class="container">
+
+    <div class="title">
+        <div class="icon">✐</div>
+        <h1>Example 1</h1>
+    </div>
+
+    <div class="intro">
+        Solve 
+        <i>dy</i>/<i>dx</i> = <i>x + y</i>, 
+        with <i>y</i>(0) = 1, 
+        step size <i>h</i> = 0.1, 
+        find <i>y</i>(0.2).
+    </div>
+
+    <div class="step-box">
+
+        <div class="step-title">
+            Step 1:
+            <i>x</i><sub>0</sub> = 0,
+            <i>y</i><sub>0</sub> = 1
+        </div>
+
+        <div class="formula">
+
+            Predictor:
+            ỹ<sub>1</sub> = 1 + 0.1(0 + 1) = 1.1
+            <br>
+
+            Corrector:
+             <i>y</i><sub>1</sub> =
+            1 +
+            <sup>0.1</sup>/<sub>2</sub>
+            [(0 + 1) + (0.1 + 1.1)]
+            = 1 + 0.05[1 + 1.2]
+            = 1.11
+        </div>
+
+    </div>
+
+    <div class="step-box">
+
+        <div class="step-title">
+            Step 2:
+            <i>x</i><sub>1</sub> = 0.1,
+            <i>y</i><sub>1</sub> = 1.11
+        </div>
+
+        <div class="formula">
+
+            Predictor:
+            ỹ<sub>2</sub> =
+            1.11 + 0.121
+            = 1.231
+            <br>
+
+            Corrector:
+            <i>y</i><sub>2</sub> =
+            1.11 +
+            <sup>0.1</sup>/<sub>2</sub>
+            [(0.1 + 1.11) + (0.2 + 1.231)]
+            = 1.11 + 0.05[1.21 + 1.431]
+            = 1.2421
+
+        </div>
+
+    </div>
+
+    <div class="result">
+        Result:
+        <i>y</i>(0.2) ≈ 1.2421
+    </div>
+
+    <div class="exact">
+        Exact:
+         <i>y</i> = 2e<sup>x</sup> − x − 1
+        ⇒
+        <i>y</i>(0.2) =
+        2e<sup>0.2</sup> − 0.2 − 1
+        ≈ 1.2428.
+        Error ≈ 0.0007.
+    </div>
+
+</div>
+
+<!-- =========================
+     EXAMPLE 2
+========================= -->
+
+<div class="container2">
+
+    <div class="title">
+        <div class="icon">✐</div>
+        <h1>Example 2</h1>
+    </div>
+
+     <!-- INTRO -->
+    <div class="intro">
+        Solve 
+        <i>dy</i>/<i>dx</i> =
+        <i>y − x</i><sup>2</sup> + 1,
+        with <i>y</i>(0) = 0.5,
+        step size <i>h</i> = 0.2,
+        find <i>y</i>(0.4).
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-box">
+
+        <div class="step-title">
+            Step 1:
+            <i>x</i><sub>0</sub> = 0,
+            <i>y</i><sub>0</sub> = 0.5
+        </div>
+
+        <div class="formula">
+
+            <i>f</i>(0,0.5) = 0.5 − 0 + 1 = 1.5
+            <br>
+
+            Predictor:
+            ỹ<sub>1</sub> =
+            0.5 + 0.2(1.5)
+            = 0.8
+            <br>
+
+            <i>f</i>(0.2,0.8) =
+            0.8 − 0.04 + 1
+            = 1.76
+            <br>
+
+            Corrector:
+            <i>y</i><sub>1</sub> =
+            0.5 +
+            <sup>0.2</sup>/<sub>2</sub>
+            [1.5 + 1.76]
+            = 0.5 + 0.1(3.26)
+            = 0.826
+
+        </div>
+
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-box">
+
+        <div class="step-title">
+            Step 2:
+            <i>x</i><sub>1</sub> = 0.2,
+            <i>y</i><sub>1</sub> = 0.826
+        </div>
+
+        <div class="formula">
+
+            <i>f</i>(0.2,0.826) =
+            0.826 − 0.04 + 1
+            = 1.786
+            <br>
+
+            Predictor:
+            ỹ<sub>2</sub> =
+            0.826 + 0.2(1.786)
+            = 1.1832
+            <br>
+
+            <i>f</i>(0.4,1.1832) =
+            1.1832 − 0.16 + 1
+            = 2.0232
+            <br>
+
+            Corrector:
+            <i>y</i><sub>2</sub> =
+            0.826 +
+            <sup>0.2</sup>/<sub>2</sub>
+            [1.786 + 2.0232]
+            = 0.826 + 0.1(3.8092)
+            = 1.2069
+
+        </div>
+
+    </div>
+
+    <!-- RESULT -->
+    <div class="result">
+        Result:
+        <i>y</i>(0.4) ≈ 1.2069
+    </div>
+</div>
+
+<!-- BACK BUTTON -->
+
+<div class="back-btn">
+
+    <a href="/">
+        <button>
+            Back Home
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>
